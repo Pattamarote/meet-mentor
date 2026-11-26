@@ -36,3 +36,20 @@ export function LocationText({ loc }: { loc: string | null | undefined }) {
   }
   return <>{loc}</>;
 }
+
+/** โลโก้มุมขวาบนของแถบเมนู */
+export function NavLogo() {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src="/logo.png" alt="Channel Academy" className="nav-logo" width={44} height={44} />;
+}
+
+/** โลโก้ + ชื่อเว็บในหน้า Log-in */
+export function BrandHero() {
+  return (
+    <div className="brand-hero">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo.png" alt="Channel Academy" width={132} height={132} />
+      <h1>Meet-Mentor</h1>
+    </div>
+  );
+}

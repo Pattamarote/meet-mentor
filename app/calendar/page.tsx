@@ -6,6 +6,7 @@ import { Avatar } from '@/components/ui';
 import { MonthCalendar, CalSlot } from '@/components/MonthCalendar';
 import { validMonth, monthRange, shiftMonth, monthLabel, isValidDate, isValidTime, fmtTime, toUtc } from '@/lib/time';
 import type { SlotRow } from '@/lib/status';
+import { isUuid } from '@/lib/redirect';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,19 +18,21 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const tFrom = sp.from && isValidTime(sp.from) ? sp.from : '';
   const tTo = sp.to && isValidTime(sp.to) ? sp.to : '';
   const freeOnly = sp.free === '1';
-  const settings = await getSettings();
-  const showName = settings.show_booker_name === 'true';
-
-  const { data: mentors } = await db().from('mentors').select('id,name,photo_url,bio').eq('is_active', true).order('name');
-  const mentor = (mentors ?? []).find((m) => m.id === sp.mentor) ?? null;
-
+  const mentorParam = isUuid(sp.mentor ?? '') ? sp.mentor : '';
   const range = date
     ? { from: toUtc(date, '00:00').toISOString(), to: new Date(toUtc(date, '00:00').getTime() + 86400000).toISOString() }
     : monthRange(month);
   let q = db().from('slot_view').select('*').eq('mentor_active', true).gte('start_at', range.from).lt('start_at', range.to).order('start_at');
-  if (mentor) q = q.eq('mentor_id', mentor.id);
+  if (mentorParam) q = q.eq('mentor_id', mentorParam);
   if (freeOnly) q = q.eq('status', 'available');
-  const { data } = await q;
+  // ดึงข้อมูลพร้อมกันเพื่อให้หน้าโหลดเร็วขึ้น
+  const [settings, { data: mentors }, { data }] = await Promise.all([
+    getSettings(),
+    db().from('mentors').select('id,name,photo_url,bio').eq('is_active', true).order('name'),
+    q,
+  ]);
+  const showName = settings.show_booker_name === 'true';
+  const mentor = (mentors ?? []).find((m) => m.id === mentorParam) ?? null;
   let rows = (data ?? []) as SlotRow[];
   if (tFrom) rows = rows.filter((r) => fmtTime(r.start_at) >= tFrom);
   if (tTo) rows = rows.filter((r) => fmtTime(r.end_at) <= tTo);

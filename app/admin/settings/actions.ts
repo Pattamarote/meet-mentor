@@ -14,7 +14,6 @@ export async function saveSettings(fd: FormData) {
   const rows = [
     { key: 'max_bookings_per_month', value: max === '0' ? '' : max },
     { key: 'show_booker_name', value: fd.get('show_booker_name') === 'on' ? 'true' : 'false' },
-    { key: 'allow_self_register', value: fd.get('allow_self_register') === 'on' ? 'true' : 'false' },
     { key: 'admin_contact', value: String(fd.get('admin_contact') ?? '').trim().slice(0, 300) },
   ];
   const { error } = await db().from('settings').upsert(rows);

@@ -18,13 +18,13 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
   const sp = await searchParams;
   const month = validMonth(sp.month);
   const view = sp.view === 'cal' ? 'cal' : 'list';
-  const { data: mentors } = await db().from('mentors').select('id,name,is_active').order('name');
-  const mentor = (mentors ?? []).find((m) => m.id === sp.mentor) ?? null;
+  const mentorParam = /^[0-9a-f-]{36}$/i.test(sp.mentor ?? '') ? sp.mentor : '';
   const { from, to } = monthRange(month);
   let q = db().from('slot_view').select('*').gte('start_at', from).lt('start_at', to).order('start_at');
-  if (mentor) q = q.eq('mentor_id', mentor.id);
+  if (mentorParam) q = q.eq('mentor_id', mentorParam);
   if (sp.status) q = q.eq('status', sp.status);
-  const { data } = await q;
+  const [{ data: mentors }, { data }] = await Promise.all([db().from('mentors').select('id,name,is_active').order('name'), q]);
+  const mentor = (mentors ?? []).find((m) => m.id === mentorParam) ?? null;
   const slots = (data ?? []) as SlotRow[];
   const ret = `/admin/schedule?${new URLSearchParams({ month, ...(mentor ? { mentor: mentor.id } : {}), ...(sp.status ? { status: sp.status } : {}), view })}`;
   const link = (over: Record<string, string>) => `/admin/schedule?${new URLSearchParams({ month, ...(mentor ? { mentor: mentor.id } : {}), view, ...over })}`;

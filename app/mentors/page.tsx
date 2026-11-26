@@ -8,8 +8,10 @@ export const dynamic = 'force-dynamic';
 
 export default async function MentorsPage() {
   const me = await requireMember();
-  const { data: mentors } = await db().from('mentors').select('id,name,photo_url,bio').eq('is_active', true).order('name');
-  const { data: free } = await db().from('slot_view').select('mentor_id').eq('status', 'available').gt('start_at', new Date().toISOString());
+  const [{ data: mentors }, { data: free }] = await Promise.all([
+    db().from('mentors').select('id,name,photo_url,bio').eq('is_active', true).order('name'),
+    db().from('slot_view').select('mentor_id').eq('status', 'available').gt('start_at', new Date().toISOString()),
+  ]);
   const count: Record<string, number> = {};
   for (const r of free ?? []) count[r.mentor_id] = (count[r.mentor_id] ?? 0) + 1;
 

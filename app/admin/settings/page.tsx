@@ -26,7 +26,6 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           <label>จำนวนครั้งสูงสุดต่อคนต่อเดือน (เว้นว่าง = จองได้ตามเวลาว่าง)</label>
           <input name="max_bookings_per_month" inputMode="numeric" defaultValue={s.max_bookings_per_month} />
           <label><input type="checkbox" name="show_booker_name" defaultChecked={s.show_booker_name === 'true'} /> แสดงชื่อผู้จองในตารางให้ User คนอื่นเห็น (ถ้าองค์กรอนุญาต)</label>
-          <label><input type="checkbox" name="allow_self_register" defaultChecked={s.allow_self_register === 'true'} /> เปิดให้ User สมัครเอง (สถานะ “รออนุมัติ”)</label>
           <label>ช่องทางติดต่อ Admin (แสดงในหน้ารายการจองและหน้าลืมรหัสผ่าน)</label>
           <textarea name="admin_contact" rows={2} defaultValue={s.admin_contact} />
           <div className="mt"><SubmitButton>บันทึกการตั้งค่า</SubmitButton></div>

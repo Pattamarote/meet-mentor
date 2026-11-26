@@ -16,12 +16,11 @@ type Row = {
 export default async function MyBookings({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
   const me = await requireMember();
   const sp = await searchParams;
-  const settings = await getSettings();
   // ดึงเฉพาะรายการของผู้ใช้คนนี้ (ตรวจจาก session ฝั่ง Server)
-  const { data } = await db()
+  const [settings, { data }] = await Promise.all([getSettings(), db()
     .from('bookings')
     .select('id,booking_no,status,created_at,cancel_reason,note,slot:slots(start_at,end_at,location,mentor:mentors(name,default_location)),history:booking_history(action)')
-    .eq('member_id', me.id);
+    .eq('member_id', me.id)]);
   const rows = ((data ?? []) as unknown as Row[]).sort((a, b) => a.slot.start_at.localeCompare(b.slot.start_at));
   const now = new Date().toISOString();
   const upcoming = rows.filter((r) => r.status === 'confirmed' && r.slot.end_at > now);

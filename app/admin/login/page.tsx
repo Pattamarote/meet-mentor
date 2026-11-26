@@ -1,3 +1,4 @@
+import { BrandHero } from '@/components/ui';
 import Link from 'next/link';
 import { LoginForm } from '@/app/login/LoginForm';
 import { adminLogin } from './actions';
@@ -5,7 +6,7 @@ import { adminLogin } from './actions';
 export default function AdminLogin() {
   return (
     <main className="narrow">
-      <h1 style={{ textAlign: 'center', color: 'var(--brand)' }}>meet-mentor</h1>
+      <BrandHero />
       <p className="muted" style={{ textAlign: 'center' }}>สำหรับผู้ดูแลระบบ (Admin)</p>
       <div className="card">
         <h2 style={{ marginTop: 0 }}>เข้าสู่ระบบ Admin</h2>

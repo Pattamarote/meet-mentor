@@ -19,13 +19,14 @@ export default async function BookingsAdmin({ searchParams }: { searchParams: Pr
   const mentorId = isUuid(sp.mentor ?? '') ? sp.mentor : '';
   const status = sp.status ?? '';
   const q = sp.q ?? '';
-  const { data: mentors } = await db().from('mentors').select('id,name,is_active').order('name');
-  const rows = await findBookings({ month, mentor: mentorId || undefined, status, q });
-
   const { from, to } = monthRange(month);
   let sq = db().from('slot_view').select('status,is_open').gte('start_at', from).lt('start_at', to);
   if (mentorId) sq = sq.eq('mentor_id', mentorId);
-  const { data: slots } = await sq;
+  const [{ data: mentors }, rows, { data: slots }] = await Promise.all([
+    db().from('mentors').select('id,name,is_active').order('name'),
+    findBookings({ month, mentor: mentorId || undefined, status, q }),
+    sq,
+  ]);
   const cnt = (s: string) => (slots ?? []).filter((x) => x.status === s).length;
   const openCount = (slots ?? []).filter((x) => x.is_open).length;
 

@@ -1,3 +1,4 @@
+import { BrandHero } from '@/components/ui';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSettings } from '@/lib/db';
@@ -14,7 +15,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const settings = await getSettings();
   return (
     <main className="narrow">
-      <h1 style={{ textAlign: 'center', color: 'var(--brand)' }}>meet-mentor</h1>
+      <BrandHero />
       <p className="muted" style={{ textAlign: 'center' }}>ระบบนัดหมาย Mentor</p>
       <div className="card">
         <h2 style={{ marginTop: 0 }}>เข้าสู่ระบบ</h2>
@@ -31,9 +32,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <summary>ลืมรหัสผ่าน?</summary>
           <p className="small">เพื่อความปลอดภัย กรุณาติดต่อ Admin เพื่อยืนยันตัวตนและตั้งรหัสผ่านใหม่<br />{settings.admin_contact}</p>
         </details>
-        {settings.allow_self_register === 'true' && (
-          <p className="small mt">ยังไม่มีบัญชี? <Link href="/register">สมัครใช้งาน</Link></p>
-        )}
       </div>
       <p className="small muted" style={{ textAlign: 'center' }}><Link href="/admin/login">สำหรับผู้ดูแลระบบ</Link></p>
     </main>
