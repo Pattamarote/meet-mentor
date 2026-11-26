@@ -4,7 +4,7 @@ import type { FormState } from './actions';
 
 export function LoginForm({ action, fields, submit }: {
   action: (s: FormState, fd: FormData) => Promise<FormState>;
-  fields: { name: string; label: string; type?: string; inputMode?: 'numeric' | 'text'; pattern?: string; maxLength?: number; autoComplete?: string }[];
+  fields: { name: string; label: string; type?: string; inputMode?: 'numeric' | 'text'; pattern?: string; maxLength?: number; autoComplete?: string; hint?: string }[];
   submit: string;
 }) {
   const [state, formAction, pending] = useActionState(action, undefined);
@@ -15,7 +15,8 @@ export function LoginForm({ action, fields, submit }: {
       {fields.map((f) => (
         <div key={f.name}>
           <label htmlFor={f.name}>{f.label}</label>
-          <input id={f.name} name={f.name} type={f.type ?? 'text'} inputMode={f.inputMode} pattern={f.pattern} maxLength={f.maxLength} autoComplete={f.autoComplete} required />
+          <input id={f.name} name={f.name} type={f.type ?? 'text'} inputMode={f.inputMode} pattern={f.pattern} maxLength={f.maxLength} autoComplete={f.autoComplete} required aria-describedby={f.hint ? `${f.name}-hint` : undefined} />
+          {f.hint && <div id={`${f.name}-hint`} className="small muted" style={{ marginTop: 4 }}>{f.hint}</div>}
         </div>
       ))}
       <button className="btn block mt" disabled={pending}>{pending ? 'กำลังดำเนินการ...' : submit}</button>

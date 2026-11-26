@@ -112,3 +112,12 @@ details summary{cursor:pointer;color:var(--brand)}
 @media (max-width:700px){.nav-logo{width:36px;height:36px}}
 .nav-progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:100;background:linear-gradient(90deg,var(--brand) 0%,#f5c400 50%,var(--brand) 100%);background-size:200% 100%;animation:navp 1s linear infinite}
 @keyframes navp{from{background-position:200% 0}to{background-position:0 0}}
+.logo{display:flex;align-items:center;gap:10px}
+.logo span{display:flex;flex-direction:column;line-height:1.15}
+.logo small{margin-left:0}
+@media (max-width:700px){
+  .topbar .inner{gap:6px;padding:8px 10px}
+  .logo{font-size:1.05rem;width:100%}
+  .nav{width:100%;justify-content:space-between;gap:2px}
+  .nav a,.nav button{padding:6px 8px;font-size:.88rem}
+}

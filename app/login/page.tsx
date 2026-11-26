@@ -25,7 +25,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           submit="เข้าสู่ระบบ"
           fields={[
             { name: 'code', label: 'รหัสพนักงาน (5-6 หลัก)', inputMode: 'numeric', pattern: '[0-9]{5,6}', maxLength: 6, autoComplete: 'username' },
-            { name: 'pin', label: 'รหัสผ่าน (4 หลัก)', type: 'password', inputMode: 'numeric', pattern: '[0-9]{4}', maxLength: 4, autoComplete: 'current-password' },
+            { name: 'pin', label: 'รหัสผ่าน (4 หลัก)', type: 'password', inputMode: 'numeric', pattern: '[0-9]{4}', maxLength: 4, autoComplete: 'current-password', hint: 'ใส่รหัสผ่านเป็นวันเดือนเกิด 4 หลัก เช่น เกิด 5 มีนาคม ใส่ 0503' },
           ]}
         />
         <details className="mt">

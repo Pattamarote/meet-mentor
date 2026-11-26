@@ -9,7 +9,7 @@ export function AdminNav({ active, username }: { active: 'schedule' | 'bookings'
   return (
     <header className="topbar">
       <div className="inner">
-        <Link href="/admin/schedule" className="logo">Meet-Mentor<small>Admin · {username}</small></Link>
+        <Link href="/admin/schedule" className="logo"><NavLogo /><span>Meet-Mentor<small>Admin · {username}</small></span></Link>
         <nav className="nav">
           {item('schedule', '/admin/schedule', 'จัดการตาราง Mentor')}
           {item('bookings', '/admin/bookings', 'รายการจองและรายงาน')}
@@ -17,7 +17,6 @@ export function AdminNav({ active, username }: { active: 'schedule' | 'bookings'
           {item('settings', '/admin/settings', 'ตั้งค่า')}
           <form action={logoutAction} className="inline-form"><button type="submit">ออกจากระบบ</button></form>
         </nav>
-        <NavLogo />
       </div>
     </header>
   );
